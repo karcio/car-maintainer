@@ -1,7 +1,14 @@
 # car-maintainer
 
+
+## Clone repository
+```
+git clone git@github.com:karcio/car-maintainer.git
+```
+
 ## Create an environment
 ```
+cd car-maintainer
 python3 -m venv venv
 ```
 
@@ -10,12 +17,12 @@ python3 -m venv venv
 . venv/bin/activate
 ```
 
-## install requirements
+## Install requirements
 ```
 pip3 install -r requirements.txt
 ```
 
-## run app
+## Run app
 ```
 flask --app app run
 ```

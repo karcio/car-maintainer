@@ -1,3 +1,5 @@
+-- mysql
+
 DROP DATABASE carmanagerdb;
 CREATE DATABASE carmanagerdb;
 
@@ -100,3 +102,25 @@ VALUES(
     'Karol',
     '1'
 );
+
+-- postgres
+
+
+DROP DATABASE carmanagerdb;
+CREATE DATABASE carmanagerdb;
+
+CREATE USER dbuser1;
+ALTER USER dbuser1 WITH ENCRYPTED PASSWORD 'pa88w0rd';
+GRANT ALL PRIVILEGES ON DATABASE carmanagerdb TO dbuser1;
+ALTER USER dbuser1 WITH SUPERUSER;
+ALTER DATABASE carmanagerdb OWNER TO dbuser1;
+
+\c carmanagerdb;
+
+CREATE TABLE fuel(
+    fuelid SERIAL PRIMARY KEY,
+    fueltype VARCHAR(10) NOT NULL
+);
+
+INSERT INTO fuel (fueltype) VALUES ('Petrol');
+INSERT INTO fuel (fueltype) VALUES ('Diesel');

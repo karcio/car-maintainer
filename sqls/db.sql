@@ -105,14 +105,13 @@ VALUES(
 -- postgres
 DROP DATABASE carmanagerdb;
 CREATE DATABASE carmanagerdb;
+\c carmanagerdb;
 
 CREATE USER dbuser1;
 ALTER USER dbuser1 WITH ENCRYPTED PASSWORD 'pa88w0rd';
 GRANT ALL PRIVILEGES ON DATABASE carmanagerdb TO dbuser1;
 ALTER USER dbuser1 WITH SUPERUSER;
 ALTER DATABASE carmanagerdb OWNER TO dbuser1;
-
-\c carmanagerdb;
 
 DROP TABLE fuel;
 CREATE TABLE fuel(
@@ -122,6 +121,7 @@ CREATE TABLE fuel(
 
 INSERT INTO fuel (fueltype) VALUES ('Petrol');
 INSERT INTO fuel (fueltype) VALUES ('Diesel');
+SELECT * FROM fuel;
 
 DROP TABLE cars; 
 CREATE TABLE cars(
@@ -138,6 +138,7 @@ CREATE TABLE cars(
 );
 
 INSERT INTO cars (brand, typename, engine, year, carowner, fuelid) VALUES('Ford', 'Fiesta', 1200, 2011, 'Karol', 1);
+SELECT * FROM cars;
 
 
 DROP TABLE fuel_log;

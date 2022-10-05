@@ -114,6 +114,7 @@ ALTER DATABASE carmanagerdb OWNER TO dbuser1;
 
 \c carmanagerdb;
 
+DROP TABLE fuel;
 CREATE TABLE fuel(
     fuelid SERIAL PRIMARY KEY,
     fueltype VARCHAR(10) NOT NULL
@@ -122,6 +123,7 @@ CREATE TABLE fuel(
 INSERT INTO fuel (fueltype) VALUES ('Petrol');
 INSERT INTO fuel (fueltype) VALUES ('Diesel');
 
+DROP TABLE cars; 
 CREATE TABLE cars(
     carid SERIAL PRIMARY KEY,
     brand VARCHAR(10) NOT NULL,
@@ -137,15 +139,21 @@ CREATE TABLE cars(
 
 INSERT INTO cars (brand, typename, engine, year, carowner, fuelid) VALUES('Ford', 'Fiesta', 1200, 2011, 'Karol', 1);
 
+
+DROP TABLE fuel_log;
 CREATE TABLE fuel_log(
     fuellogid SERIAL PRIMARY KEY,
     carid INT NOT NULL,
     fuel NUMERIC(4, 2) NOT NULL,
     odometer NUMERIC(4, 2) NOT NULL,
     petrolcost NUMERIC(3, 2) NOT NULL,
-    currentdate DATE NOT NULL
+    currentdate DATE NOT NULL,
+    CONSTRAINT fk_carid
+        FOREIGN KEY(carid) 
+        REFERENCES cars(carid)
 ); 
 
+DROP TABLE maintanance;
 CREATE TABLE maintanance(
     maintananceid SERIAL PRIMARY KEY,
     fix VARCHAR(20) NOT NULL,
@@ -154,6 +162,7 @@ CREATE TABLE maintanance(
     replacement VARCHAR(20) NOT NULL
 );
 
+DROP TABLE maintanance_log;
 CREATE TABLE maintanance_log(
     maintlogid SERIAL PRIMARY KEY,
     maintananceid INT NOT NULL,
@@ -167,28 +176,20 @@ CREATE TABLE maintanance_log(
         REFERENCES maintanance(maintananceid)
 );
 
+DROP TABLE consumption_cost;
 CREATE TABLE consumption_cost(
     concostid SERIAL PRIMARY KEY,
     carid INT NOT NULL,
     consumption NUMERIC(3, 1) NOT NULL,
     cost NUMERIC(6, 2) NOT NULL,
-    currentdate DATE NOT NULL,
-    CONSTRAINT fk_carid 
-        FOREIGN KEY(carid) 
-        REFERENCES fuel_log(carid)
-);
+    currentdate DATE NOT NULL
+ );
 
--- ERROR:  there is no unique constraint matching given keys for referenced table "fuel_log"
-
+DROP TABLE maintenance_cost;
 CREATE TABLE maintenance_cost(
     maincostid SERIAL PRIMARY KEY,
     carid INT NOT NULL,
     issue VARCHAR(20) NOT NULL,
     cost NUMERIC(6, 2) NOT NULL,
-    currentdate DATE NOT NULL,
-    CONSTRAINT fk_carid
-        FOREIGN KEY(carid) 
-        REFERENCES maintanance_log(carid)
+    currentdate DATE NOT NULL
 );
-
--- ERROR:  there is no unique constraint matching given keys for referenced table "maintanance_log"

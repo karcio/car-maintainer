@@ -149,13 +149,14 @@ CREATE TABLE fuel_log(
     odometer NUMERIC(4, 2) NOT NULL,
     petrolcost NUMERIC(3, 2) NOT NULL,
     currentdate DATE NOT NULL,
+    notes TEXT NULL,
     CONSTRAINT fk_carid
         FOREIGN KEY(carid) 
         REFERENCES cars(carid)
 ); 
 
-DROP TABLE maintanance;
-CREATE TABLE maintanance(
+DROP TABLE maintanance_type;
+CREATE TABLE maintanance_type(
     maintananceid SERIAL PRIMARY KEY,
     fix VARCHAR(20) NOT NULL,
     wash VARCHAR(20) NOT NULL,

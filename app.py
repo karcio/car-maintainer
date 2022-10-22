@@ -1,11 +1,70 @@
 import os
 from flask import Flask, render_template, session, request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
 import logging
+
+#engine = create_engine("postgresql://dbuser1:pa88w0rd@172.17.0.2/carmanagerdb")
 
 logging.basicConfig(
     format=' %(levelname)s - %(asctime)s - %(message)s ', level=logging.DEBUG)
 
+db = SQLAlchemy()
+
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://dbuser1:pa88w0rd@172.17.0.2/carmanagerdb"
+db.init_app(app)
+
+
+class fuel(db.Model):
+    fuelid = db.Column('id', db.Integer, primary_key=True)
+    fueltype = db.Column(db.String(10))
+
+    def __init__(self, fuelid, fueltype):
+        self.fuelid = fuelid
+        self.fueltype = fueltype
+
+
+class cars(db.Model):
+    carid = db.Column('id', db.Integer, primary_key=True)
+    brand = db.Column(db.String(10))
+    typename = db.Column(db.String(10))
+    engine = db.Column(db.Integer)
+    year = db.Column(db.String(4))
+    carowner = db.Column(db.String(10))
+    fuelid = db.Column(db.Integer)
+
+    def __init__(self, carid, brand, typename, engine, year, carowner, fuelid):
+        self.carid = carid
+        self.brand = brand
+        self.typename = typename
+        self.engine = engine
+        self.year = year
+        self.carowner = carowner
+        self.fuelid = fuelid
+
+
+class fuel_log(db.Model):
+    fuellogid = db.Column('id', db.Integer, primary_key=True)
+    carid = db.Column(db.Integer)
+    fuel = db.Column(db.Float(4))
+    odometer = db.Column(db.Float(4))
+    petrolcost = db.Column(db.Float(4))
+    currentdate = db.Column(db.String(10))
+    notes = db.Column(db.Integer)
+
+    def __init__(self, fuellogid, carid, fuel, odometer, petrolcost, currentdate, notes):
+        self.fuellogid = fuellogid
+        self.carid = carid
+        self.fuel = fuel
+        self.odometer = odometer
+        self.petrolcost = petrolcost
+        self.currentdate = currentdate
+        self.notes = notes
+
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/', methods=['GET'])

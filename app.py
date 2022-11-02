@@ -1,8 +1,9 @@
 import os
 from flask import Flask, render_template, session, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import Table, create_engine
 import logging
+
 
 engine = create_engine("postgresql://dbuser1:pa88w0rd@172.17.0.2/carmanagerdb")
 
@@ -16,7 +17,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://dbuser1:pa88w0rd@172.17.0.
 db.init_app(app)
 
 
-class users(db.Model):
+class Users(db.Model):
     userid = db.Column('userid', db.Integer, primary_key=True)
     user = db.Column(db.String(10))
     password = db.Column(db.String(24))
@@ -27,7 +28,7 @@ class users(db.Model):
         self.password = password
 
 
-class fuel(db.Model):
+class Fuel(db.Model):
     fuelid = db.Column('fuelid', db.Integer, primary_key=True)
     fueltype = db.Column(db.String(10))
 
@@ -36,7 +37,7 @@ class fuel(db.Model):
         self.fueltype = fueltype
 
 
-class cars(db.Model):
+class Cars(db.Model):
     carid = db.Column('carid', db.Integer, primary_key=True)
     brand = db.Column(db.String(10))
     typename = db.Column(db.String(10))
@@ -55,7 +56,7 @@ class cars(db.Model):
         self.fuelid = fuelid
 
 
-class fuel_log(db.Model):
+class Fuel_log(db.Model):
     fuellogid = db.Column('fuellogid', db.Integer, primary_key=True)
     carid = db.Column(db.Integer)
     fuel = db.Column(db.Float(4))
@@ -74,7 +75,7 @@ class fuel_log(db.Model):
         self.notes = notes
 
 
-class maintanance_type(db.Model):
+class Maintanance_type(db.Model):
     maintananceid = db.Column('maintananceid', db.Integer, primary_key=True)
     fix = db.Column(db.String(20))
     wash = db.Column(db.String(20))
@@ -89,7 +90,7 @@ class maintanance_type(db.Model):
         self.replacement = replacement
 
 
-class maintanance_log(db.Model):
+class Maintanance_log(db.Model):
     maintlogid = db.Column('maintlogid', db.Integer, primary_key=True)
     maintananceid = db.Column(db.Integer)
     carid = db.Column(db.Integer)
@@ -108,7 +109,7 @@ class maintanance_log(db.Model):
         self.notes = notes
 
 
-class consumption_cost(db.Model):
+class Consumption_cost(db.Model):
     concostid = db.Column('concostid', db.Integer, primary_key=True)
     carid = db.Column(db.Integer)
     consumption = db.Column(db.Float(4))
@@ -123,7 +124,7 @@ class consumption_cost(db.Model):
         self.currentdate = currentdate
 
 
-class maintenance_cost(db.Model):
+class Maintenance_cost(db.Model):
     maincostid = db.Column('maincostid', db.Integer, primary_key=True)
     carid = db.Column(db.Integer)
     issue = db.Column(db.Float(4))
@@ -168,6 +169,26 @@ def appLogin():
 def logout():
     session['logged_in'] = False
     return home()
+
+
+@app.route("/cars")
+def cars():
+    if not session.get('logged_in'):
+        logging.info("Render login page")
+        return render_template('login.html')
+    else:
+        logging.info("Render cars page")
+        logging.info(selectCars())
+        return render_template('cars.html', cars=selectCars())
+
+
+def selectCars():
+    allCars = db.session.query(Cars).order_by(Cars.brand)
+
+    for cars in allCars:
+        print(cars.brand)
+
+    return allCars
 
 
 if __name__ == '__main__':

@@ -6,30 +6,20 @@
 
     {% include '/structures/navbar.html' %}
 
-    <h1>Cars</h1>
+    <h1>Users</h1>
 
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">carid</th>
-          <th scope="col">brand</th>
-          <th scope="col">typename</th>
-          <th scope="col">engine</th>
-          <th scope="col">year</th>
-          <th scope="col">carowner</th>
-          <th scope="col">fuelid</th>
+          <th scope="col">id</th>
+          <th scope="col">name</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          {% for entry in cars %}
-          <th scope="row">{{ entry.carid }}</th>
-          <td>{{ entry.brand }}</td>
-          <td>{{ entry.typename }}</td>
-          <td>{{ entry.engine }}</td>
-          <td>{{ entry.year }}</td>
-          <td>{{ entry.carowner }}</td>
-          <td>{{ entry.fuelid }}</td>
+          {% for entry in users %}
+          <th scope="row">{{ entry.userid }}</th>
+          <td>{{ entry.user }}</td>
         </tr>
         {% endfor %}
       </tbody>

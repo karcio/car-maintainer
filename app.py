@@ -171,24 +171,40 @@ def logout():
     return home()
 
 
+@app.route("/users")
+def user_list():
+    if not session.get('logged_in'):
+        logging.info("Render login page")
+        return render_template('login.html')
+    else:
+        logging.info("Render user page")
+        users = db.session.execute(
+            db.select(Users).order_by(Users.user)).scalars()
+        return render_template("users.html", users=users)
+
+
+@app.route("/fuel")
+def fuel_list():
+    if not session.get('logged_in'):
+        logging.info("Render login page")
+        return render_template('login.html')
+    else:
+        logging.info("Render fuel page")
+        fuel = db.session.execute(
+            db.select(Fuel).order_by(Fuel.fuelid)).scalars()
+        return render_template("fuel.html", fuel=fuel)
+
+
 @app.route("/cars")
-def cars():
+def cars_list():
     if not session.get('logged_in'):
         logging.info("Render login page")
         return render_template('login.html')
     else:
         logging.info("Render cars page")
-        logging.info(selectCars())
-        return render_template('cars.html', cars=selectCars())
-
-
-def selectCars():
-    allCars = db.session.query(Cars).order_by(Cars.brand)
-
-    for cars in allCars:
-        print(cars.brand)
-
-    return allCars
+        cars = db.session.execute(
+            db.select(Cars).order_by(Cars.brand)).scalars()
+        return render_template('cars.html', cars=cars)
 
 
 if __name__ == '__main__':

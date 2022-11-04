@@ -6,7 +6,7 @@
 
     {% include '/structures/navbar.html' %}
 
-    <h1>Fuel</h1>
+    <h3>Fuel</h3>
 
     <table class="table table-hover">
       <thead>
@@ -24,6 +24,17 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <h3>Add fuel</h3>
+    <form action="/fuel" method="POST">
+      <div class="form-group">
+        <label for="name">fueltype *</label>
+        <input type="text" class="form-control" placeholder="fueltype" name="fueltype" required />
+      </div>
+      <p>
+        <button type="submit" class="btn btn-dark">submit</button>
+      </p>
+    </form>
 
     {% include '/structures/footer.html' %}
   </div>

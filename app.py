@@ -3,6 +3,7 @@ from flask import Flask, render_template, session, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table, create_engine
 import logging
+import uuid
 
 
 engine = create_engine("postgresql://dbuser1:pa88w0rd@172.17.0.2/carmanagerdb")
@@ -171,40 +172,77 @@ def logout():
     return home()
 
 
-@app.route("/users")
+@app.route("/users", methods=["GET", "POST"])
 def user_list():
     if not session.get('logged_in'):
         logging.info("Render login page")
         return render_template('login.html')
     else:
         logging.info("Render user page")
-        users = db.session.execute(
-            db.select(Users).order_by(Users.user)).scalars()
-        return render_template("users.html", users=users)
+
+        if request.method == "GET":
+            users = db.session.execute(
+                db.select(Users).order_by(Users.user)).scalars()
+            return render_template("users.html", users=users)
+        elif request.method == "POST":
+            user = Users(
+                userid=4,  # TODO: take this automatically
+                user=request.form["username"],
+                password=request.form["password"]
+            )
+            db.session.add(user)
+            db.session.commit()
+            return render_template('success.html')
+
+        # return render_template("users.html")
 
 
-@app.route("/fuel")
+@app.route("/fuel", methods=["GET", "POST"])
 def fuel_list():
     if not session.get('logged_in'):
         logging.info("Render login page")
         return render_template('login.html')
     else:
         logging.info("Render fuel page")
-        fuel = db.session.execute(
-            db.select(Fuel).order_by(Fuel.fuelid)).scalars()
-        return render_template("fuel.html", fuel=fuel)
+        if request.method == "GET":
+            fuel = db.session.execute(
+                db.select(Fuel).order_by(Fuel.fuelid)).scalars()
+            return render_template("fuel.html", fuel=fuel)
+        elif request.method == "POST":
+            fuel = Fuel(
+                fuelid=5,  # TODO: take this automatically
+                fueltype=request.form["fueltype"]
+            )
+            db.session.add(fuel)
+            db.session.commit()
+            return render_template('success.html')
 
 
-@app.route("/cars")
+@app.route("/cars", methods=["GET", "POST"])
 def cars_list():
     if not session.get('logged_in'):
         logging.info("Render login page")
         return render_template('login.html')
     else:
         logging.info("Render cars page")
-        cars = db.session.execute(
-            db.select(Cars).order_by(Cars.brand)).scalars()
-        return render_template('cars.html', cars=cars)
+        if request.method == "GET":
+            cars = db.session.execute(
+                db.select(Cars).order_by(Cars.brand)).scalars()
+            return render_template('cars.html', cars=cars)
+        elif request.method == "POST":
+            car = Cars(
+                carid=2,  # TODO: take this automatically
+                brand=request.form["brand"],
+                typename=request.form["typename"],
+                engine=request.form["engine"],
+                year=request.form["year"],
+                # TODO: take this from users
+                carowner=request.form["carowner"],
+                fuelid=2
+            )
+            db.session.add(car)
+            db.session.commit()
+            return render_template('success.html')
 
 
 if __name__ == '__main__':

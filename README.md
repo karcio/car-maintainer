@@ -14,15 +14,20 @@ python3 -m venv venv
 
 ## Activate the environment
 ```
-. venv/bin/activate
+source venv/bin/activate
 ```
 
 ## Install requirements
 ```
-pip3 install -r requirements.txt
+pip install -r requirements.txt
 ```
 
+## create file `.flaskenv` in root folder with sample content:
+```
+FLASK_APP=app
+FLASK_DEBUG=0
+```
 ## Run app
 ```
-flask --app app run
+flask run
 ```

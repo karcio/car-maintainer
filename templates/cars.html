@@ -6,7 +6,7 @@
 
     {% include '/structures/navbar.html' %}
 
-    <h1>Cars</h1>
+    <h3>Cars</h3>
 
     <table class="table table-hover">
       <thead>
@@ -34,6 +34,33 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <h3>Add car</h3>
+    <form action="/cars" method="POST">
+      <div class="form-group">
+        <label for="brand">brand *</label>
+        <input type="text" class="form-control" placeholder="brand" name="brand" required />
+      </div>
+      <div class="form-group">
+        <label for="typename">type *</label>
+        <input type="text" class="form-control" placeholder="typename" maxlength="10" name="typename" required />
+      </div>
+      <div class="form-group">
+        <label for="engine">engine *</label>
+        <input type="number" class="form-control" placeholder="engine" maxlength="4" name="engine" required />
+      </div>
+      <div class="form-group">
+        <label for="year">year *</label>
+        <input type="number" class="form-control" placeholder="year" maxlength="4" name="year" required />
+      </div>
+      <div class="form-group">
+        <label for="carowner">carowner *</label>
+        <input type="text" class="form-control" placeholder="carowner" maxlength="10" name="carowner" required />
+      </div>
+      <p>
+        <button type="submit" class="btn btn-dark">submit</button>
+      </p>
+    </form>
 
     {% include '/structures/footer.html' %}
   </div>
